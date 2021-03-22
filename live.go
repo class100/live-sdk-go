@@ -17,15 +17,14 @@ type (
 
 	// CreateLiveRsp 创建直播响应
 	CreateLiveRsp struct {
-		// LiveId 直播编号,如果用AndLive此时有值,如果用Migu时无值
-		LiveId uint64 `json:"liveId,string"`
-		// ChannelId 咪咕直播频道编号
-		ChannelId string `json:"channelId"`
+		// id 直播编号
+		Id int64 `json:"id,string"`
 	}
 
 	// GetLivePushReq 获取推流地址请求
 	GetLivePushReq struct {
-		BaseGetLiveReq
+		// Id 创建直播返回编号
+		Id uint64 `json:"id,string" validate:"required"`
 	}
 
 	// GetLivePushRsp 获取推流地址返回响应
@@ -50,7 +49,8 @@ type (
 
 	// GetLivePullReq 获取拉流信息请求
 	GetLivePullReq struct {
-		BaseGetLiveReq
+		// Id 创建直播返回编号
+		Id uint64 `json:"id,string" validate:"required"`
 	}
 
 	// GetLivePullRsp 获取拉流信息响应

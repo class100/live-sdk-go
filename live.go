@@ -93,6 +93,6 @@ type (
 		// LiveId 直播编号,如果是和直播该字段有效
 		LiveId int64 `json:"liveId"`
 		// ChannelId 推拉流频道编号
-		ChannelId string `json:"channel_id" validate:"required"`
+		ChannelId string `json:"channelId" validate:"required"`
 	}
 )

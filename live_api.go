@@ -6,17 +6,17 @@ import (
 
 const (
 	ApiPathLiveCreate ApiPath = "live"
-	ApiPathLivePush   ApiPath = "live/pull"
-	ApiPathLivePull   ApiPath = "live/push"
+	ApiPathLivePush   ApiPath = "live/push"
+	ApiPathLivePull   ApiPath = "live/pull"
 )
 
 type liver interface {
 	// CreateLive 创建直播
 	CreateLive(req *CreateLiveReq) (live *CreateLiveRsp, err error)
 	// GetLivePush 获取直播推流
-	GetLivePush(req *GetLivePushReq) (rsp *GetLivePushRsp, err error)
+	GetLivePush(req *BaseGetLiveReq) (rsp *GetLivePushRsp, err error)
 	// GetLivePull 获取直播拉流
-	GetLivePull(req *GetLivePullReq) (rsp *GetLivePullRsp, err error)
+	GetLivePull(req *BaseGetLiveReq) (rsp *GetLivePullRsp, err error)
 }
 
 func (client *httpClient) CreateLive(req *CreateLiveReq) (live *CreateLiveRsp, err error) {
@@ -31,7 +31,7 @@ func (client *httpClient) CreateLive(req *CreateLiveReq) (live *CreateLiveRsp, e
 	return
 }
 
-func (client *httpClient) GetLivePush(req *GetLivePushReq) (rsp *GetLivePushRsp, err error) {
+func (client *httpClient) GetLivePush(req *BaseGetLiveReq) (rsp *GetLivePushRsp, err error) {
 	rsp = new(GetLivePushRsp)
 	err = client.requestApi(
 		ApiPathLivePush,
@@ -43,7 +43,7 @@ func (client *httpClient) GetLivePush(req *GetLivePushReq) (rsp *GetLivePushRsp,
 	return
 }
 
-func (client *httpClient) GetLivePull(req *GetLivePullReq) (rsp *GetLivePullRsp, err error) {
+func (client *httpClient) GetLivePull(req *BaseGetLiveReq) (rsp *GetLivePullRsp, err error) {
 	rsp = new(GetLivePullRsp)
 	err = client.requestApi(
 		ApiPathLivePull,

@@ -4,7 +4,61 @@ import (
 	`github.com/storezhang/gox`
 )
 
+const (
+	// original  0 原画
+	// 360p  1: 流畅
+	// 480p  2: 标清
+	// 720p  3: 高清
+	// 1080p 4: 超清
+	// audio 5: 音频
+	// VideoTypeAudio audio 音频
+	VideoTypeAudio VideoType = "audio"
+	// VideoType360p 360p
+	VideoType360p VideoType = "360p"
+	// VideoType480p 480p
+	VideoType480p VideoType = "480p"
+	// VideoType720p 720p
+	VideoType720p VideoType = "720p"
+	// VideoType1080p  1080p
+	VideoType1080p VideoType = "1080p"
+	// VideoTypeOriginal  Original 原画
+	VideoTypeOriginal VideoType = "original"
+
+	// 视频格式类型 VideoFlowingTypeHls
+	VideoFlowingTypeHls VideoFlowingType = "hls"
+	// 视频格式类型 VideoFlowingTypeFlv
+	VideoFlowingTypeFlv VideoFlowingType = "flv"
+	// 视频格式类型 VideoFlowingTypeMp4
+	VideoFlowingTypeMp4 VideoFlowingType = "mp4"
+	// 视频格式类型 VideoFlowingTypeRtmp
+	VideoFlowingTypeRtmp VideoFlowingType = "rtmp"
+)
+
+var (
+	// VideoTypeMap 视频类型转化
+	VideoTypeMap = map[int]string{
+		0: "original",
+		1: "360p",
+		2: "480p",
+		3: "720p",
+		4: "1080p",
+		5: "audio",
+	}
+)
+
 type (
+	// VideoType 视频类型
+	VideoType string
+	// original  0 原画
+	// 360p  1: 流畅
+	// 480p  2: 标清
+	// 720p  3: 高清
+	// 1080p 4: 超清
+	// audio 5: 音频
+
+	// VideoFlowingType 视频格式类型
+	VideoFlowingType string
+
 	// CreateLiveReq 创建直播请求
 	CreateLiveReq struct {
 		// Title 直播名称 最大长度为128个字
@@ -29,21 +83,23 @@ type (
 
 	// GetLivePushRsp 获取推流地址返回响应
 	GetLivePushRsp struct {
-		// cameraList 推流相机列表
-		CameraList []*PushCamera `json:"cameraList"`
+		// cameras 推流相机列表
+		Cameras []*PushCamera `json:"cameras"`
 	}
 
 	// PushCamera 推流相机
 	PushCamera struct {
-		// Status 机会状态
-		// 0 未开始
-		// 1 直播中
-		// 2 暂停
-		// 3 结束
-		Status int64 `json:"status"`
-		// CamIndex 机位编号
-		CamIndex string `json:"camIndex"`
-		// Url 推流地址
+		// Index 相机号位
+		Index int `json:"index"`
+		// Urls 相机视频流信息
+		Urls []*VideoFlowing `json:"urls"`
+	}
+
+	VideoFlowing struct {
+		// Type 视频流类型
+		// hls flv mp4 rtmp
+		Type VideoFlowingType `json:"type"`
+		// Url 流地址
 		Url string `json:"url"`
 	}
 
@@ -55,23 +111,20 @@ type (
 
 	// GetLivePullRsp 获取拉流信息响应
 	GetLivePullRsp struct {
-		// 拉流相机
-		CameraList []*PullCamera `json:"cameraList"`
+		// Cameras 拉流相机
+		Cameras []*PullCamera `json:"cameras"`
 	}
 
 	// 拉流相机
 	PullCamera struct {
-		// CamIndex 机位编号
-		CamIndex string `json:"camIndex"`
-		// transcodeList 转码列表
-		TranscodeList []*PullCameraTranscode `json:"transcodeList"`
+		// Index 机位编号
+		Index int `json:"index"`
+		// Videos 视频信息
+		Videos []*PullVideo `json:"videos"`
 	}
 
-	// pullCameraTranscode 拉流相机转码
-	PullCameraTranscode struct {
-		// TransIndex 转码编号
-		TransIndex string `json:"transIndex"`
-		// TransType 转码类型
+	PullVideo struct {
+		// Type 类型
 		// 与创建直播时，videoType中类型对应
 		// 原画质：0
 		// 流畅: 1;
@@ -79,13 +132,9 @@ type (
 		// 高清: 3;
 		// 超清: 4;
 		// 音频: 5
-		TransType string `json:"transType"`
-		// UrlFlv flv观看地址
-		UrlFlv string `json:"urlFlv"`
-		// UrlHls  hls观看地址
-		UrlHls string `json:"urlHls"`
-		// UrlRtmp rtmp观看地址
-		UrlRtmp string `json:"urlRtmp"`
+		Type VideoType `json:"type"`
+		// Urls 相机视频流信息
+		Urls []*VideoFlowing `json:"urls"`
 	}
 
 	// BaseGetLiveReq 获取流基础信息

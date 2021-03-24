@@ -83,8 +83,8 @@ type (
 
 	// GetLivePushRsp 获取推流地址返回响应
 	GetLivePushRsp struct {
-		// cameraList 推流相机列表
-		CameraList []*PushCamera `json:"cameraList"`
+		// cameras 推流相机列表
+		Cameras []*PushCamera `json:"cameras"`
 	}
 
 	// PushCamera 推流相机
@@ -111,8 +111,8 @@ type (
 
 	// GetLivePullRsp 获取拉流信息响应
 	GetLivePullRsp struct {
-		// 拉流相机
-		CameraList []*PullCamera `json:"cameraList"`
+		// Cameras 拉流相机
+		Cameras []*PullCamera `json:"cameras"`
 	}
 
 	// 拉流相机
